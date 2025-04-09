@@ -11,19 +11,14 @@ export default class Entity {
     this.height = height;
   }
 
-  // 碰撞處理
-  collideWith(other) {
-    return (
-      this.x < other.x + other.width &&
-      this.x + this.width > other.x &&
-      this.y < other.y + other.height &&
-      this.y + this.height > other.y
-    );
+  setPosition(x, y) {
+    this.x = x;
+    this.y = y;
   }
 
   // 畫面刷新處理
-  update() {}
+  update(...args) {}
 
   // 渲染處理
-  render() {}
+  render(ctx) {}
 }
