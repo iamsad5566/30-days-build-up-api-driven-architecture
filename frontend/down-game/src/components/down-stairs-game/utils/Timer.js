@@ -19,7 +19,7 @@ export default class Timer {
   }
 
   update() {
-    if (!active) {
+    if (!this.active) {
       return false;
     }
 
