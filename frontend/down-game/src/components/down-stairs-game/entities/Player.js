@@ -65,10 +65,6 @@ export default class Player extends Entity {
 
   checkIfOnStair(stairs) {
     for (const stair of stairs) {
-      if (!stair.isSolid) {
-        continue;
-      }
-
       if (this.isStandingOnStair(stair)) {
         this.velocity = 0;
         this.y = stair.y - this.height;

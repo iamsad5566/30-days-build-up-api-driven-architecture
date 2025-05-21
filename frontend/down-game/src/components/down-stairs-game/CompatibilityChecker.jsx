@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import StairGame from "./GameMod";
 
 export default function CompatibilityChecker() {
   const [isCompatible, setIsCompatible] = useState(true);
@@ -79,4 +80,10 @@ export default function CompatibilityChecker() {
       </div>
     );
   }
+
+  return (
+    <div className="p-4">
+      <StairGame />
+    </div>
+  );
 }

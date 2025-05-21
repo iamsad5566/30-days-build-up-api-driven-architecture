@@ -1,4 +1,4 @@
-import CompatibilityChecker from "@/components/down-stairs-game/compatibilityChecker";
+import CompatibilityChecker from "@/components/down-stairs-game/CompatibilityChecker";
 import Head from "next/head";
 
 export default function Home() {
