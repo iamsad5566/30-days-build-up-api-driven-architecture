@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import StairGame from "./GameMod";
+import StairGame from "./StairGame";
 
 export default function CompatibilityChecker() {
   const [isCompatible, setIsCompatible] = useState(true);

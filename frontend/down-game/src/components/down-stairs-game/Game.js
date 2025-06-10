@@ -98,7 +98,7 @@ export default class Game {
         Math.ceil(
           (GAME_CONFIG.canvasHeight + 5 - lowestStair.y) /
             GAME_CONFIG.stairSpacing
-        ) + 2t
+        ) + 2;
       for (let i = 0; i < stairsNeeded; i++) {
         this.addNewStair();
       }
