@@ -68,8 +68,7 @@ export default class GameRenderer {
   renderUI(ctx, player, stats) {
     this.renderScore(ctx, stats.score);
     player.renderHealthBar(ctx);
-    this.renderHighestScore(ctx, stats.highestScore);
-    this.renderGameTime(ctx, stats.time);
+    this.renderGameTime(ctx, stats.timeElapsedInSeconds);
   }
 
   renderScore(ctx, score) {
@@ -96,7 +95,7 @@ export default class GameRenderer {
     ctx.fillText(
       `時間： ${minutes}:${remaingSeconds.toString().padStart(2, "0")}`,
       this.config.width - 10,
-      60
+      30
     );
   }
 
@@ -137,7 +136,7 @@ export default class GameRenderer {
 
     ctx.fillStyle = this.config.textColor;
     ctx.font = "30px Arial";
-    ctx.textAligh = "center";
+    ctx.textAlign = "center";
     ctx.fillText(
       "小朋友下樓梯",
       this.config.width / 2,
@@ -169,7 +168,7 @@ export default class GameRenderer {
 
     ctx.fillStyle = this.config.textColor;
     ctx.font = "30px Arial";
-    ctx.textAligh = "center";
+    ctx.textAlign = "center";
 
     ctx.fillText(
       "遊戲結束",

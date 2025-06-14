@@ -12,7 +12,7 @@ export const GAME_CONFIG = {
   playerMoveStep: 10,
   gravity: 0.2,
   stairSpacing: 100, // 階梯間距
-  initialHealth: 3, // 初始血量
+  initialHealth: 5, // 初始血量
   invincibleTime: 60, // 無敵時間（幀數）
   healthBarWidth: 100,
   healthBarHeight: 15,

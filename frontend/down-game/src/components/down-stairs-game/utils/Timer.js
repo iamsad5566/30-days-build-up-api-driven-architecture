@@ -27,7 +27,7 @@ export default class Timer {
     if (this.counter >= this.maxCount) {
       this.active = false;
       if (this.callback) {
-        this.callback;
+        this.callback();
       }
       return true;
     }

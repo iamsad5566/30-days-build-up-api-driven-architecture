@@ -3,7 +3,7 @@ import Head from "next/head";
 
 export default function Home() {
   return (
-    <div className="flex items-center justify-center h-screen">
+    <div className="min-h-screen bg-black overflow-y-auto">
       <Head>
         <title>小朋友下樓梯</title>
         <meta
@@ -17,16 +17,22 @@ export default function Home() {
         <h1 className="text-4xl font-bold text-center mb-8 text-white">
           小朋友下樓梯
         </h1>
-        <CompatibilityChecker />
+
+        {/* 遊戲區域 */}
+        <div className="mb-8">
+          <CompatibilityChecker />
+        </div>
+
+        {/* 遊戲說明區域 */}
         <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-md overflow-hidden">
-          <div className="bg-gray-50 p-6 border-t border-gray-200">
+          <div className="bg-gray-50 p-6">
             <h2 className="text-xl font-semibold mb-3 text-gray-700">
               遊戲說明
             </h2>
             <ul className="space-y-2 text-gray-600">
               <li className="flex items-center">
                 <svg
-                  className="w-5 h-5 mr-2 text-green-500"
+                  className="w-5 h-5 mr-2 text-green-500 flex-shrink-0"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -43,7 +49,7 @@ export default function Home() {
               </li>
               <li className="flex items-center">
                 <svg
-                  className="w-5 h-5 mr-2 text-green-500"
+                  className="w-5 h-5 mr-2 text-green-500 flex-shrink-0"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -60,7 +66,7 @@ export default function Home() {
               </li>
               <li className="flex items-center">
                 <svg
-                  className="w-5 h-5 mr-2 text-green-500"
+                  className="w-5 h-5 mr-2 text-green-500 flex-shrink-0"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -77,7 +83,7 @@ export default function Home() {
               </li>
               <li className="flex items-center">
                 <svg
-                  className="w-5 h-5 mr-2 text-green-500"
+                  className="w-5 h-5 mr-2 text-green-500 flex-shrink-0"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"

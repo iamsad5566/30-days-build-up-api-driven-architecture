@@ -14,6 +14,7 @@ export default class GameStateManager {
     highScore: 0,
     gameSpeed: GAME_CONFIG.initialSpeed,
     timeElapsed: 0,
+    timeElapsedInSeconds: 0,
   };
 
   lastUpdateTime = 0;
@@ -93,6 +94,7 @@ export default class GameStateManager {
     this.lastUpdateTime = currentTime;
 
     this.stats.timeElapsed += deltaTime;
+    this.stats.timeElapsedInSeconds = Math.floor(this.stats.timeElapsed / 1000);
   }
 
   getTimeElapsed() {

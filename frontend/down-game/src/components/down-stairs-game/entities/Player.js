@@ -29,7 +29,7 @@ export default class Player extends Entity {
     });
 
     this.blinkTimer = new Timer(FLIPPING_PARAM, () => {
-      this.invincible = !this.invincible;
+      this.isVisible = !this.isVisible;
       this.blinkTimer.reset();
     });
 
@@ -119,7 +119,6 @@ export default class Player extends Entity {
 
   takeDamage() {
     if (this.health <= 0 || this.invincible) return;
-
     this.health--;
     this.invincible = true;
     this.invincibleTimer.reset();

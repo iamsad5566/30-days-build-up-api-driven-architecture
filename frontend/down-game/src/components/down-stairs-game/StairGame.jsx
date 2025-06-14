@@ -6,17 +6,18 @@ import Game from "./Game";
 
 const StairGame = () => {
   const canvasRef = useRef(null);
-
   const gameRef = useRef(null);
 
   const [gameStatus, setGameStatus] = useState({
     score: 0,
-    highestScore: localStorage.getItem("highScore"),
+    highestScore:
+      typeof window !== "undefined" ? localStorage.getItem("highScore") : 0,
     health: GAME_CONFIG.initialHealth,
     maxHealth: GAME_CONFIG.initialHealth,
     gameState: GameState.NOT_STARTED,
     isInvincible: false,
     timeElapsed: 0,
+    timeElapsedInSeconds: 0,
   });
 
   const animationFrameIdRef = useRef(null);
@@ -28,7 +29,7 @@ const StairGame = () => {
       keysPressed.current[event.key] = true;
     } else if (event.key === " " || event.key === "Enter") {
       const game = gameRef.current;
-      if (game && game.stateManager === GameState.NOT_STARTED) {
+      if (game && game.stateManager.state === GameState.NOT_STARTED) {
         startGame();
       } else if (game && game.stateManager.state === GameState.GAME_OVER) {
         startGame();
@@ -44,7 +45,7 @@ const StairGame = () => {
   };
 
   useLayoutEffect(() => {
-    if (window !== "undefined") {
+    if (typeof window !== "undefined") {
       console.log("初始化畫布和事件處理器");
     }
 
@@ -115,6 +116,7 @@ const StairGame = () => {
     const game = gameRef.current;
     if (!game) return;
 
+    game.init();
     game.stateManager.startNewGame();
     updateGameStatus();
   };
@@ -131,6 +133,7 @@ const StairGame = () => {
       gameState: game.stateManager.state,
       isInvincible: game.player.invincible,
       timeElapsed: game.stateManager.stats.timeElapsed,
+      timeElapsedInSeconds: game.stateManager.stats.timeElapsedInSeconds,
     });
   };
 
@@ -142,7 +145,7 @@ const StairGame = () => {
     game.render();
 
     if (game.stateManager.state === GameState.PLAYING) {
-      if (game.stateManager.score % 50 === 0) {
+      if (game.stateManager.stats.score % 50 === 0) {
         updateGameStatus();
       }
     }
@@ -151,46 +154,57 @@ const StairGame = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-5 bg-gray-100">
-      <h1 className="text-2xl font-bold mb-4 text-black">小朋友下樓梯</h1>
-
-      <div className="relative">
+    <div className="flex flex-col items-center p-5">
+      {/* 遊戲畫布 */}
+      <div className="relative bg-white rounded-lg shadow-xl p-4">
         <canvas
           ref={canvasRef}
           width={GAME_CONFIG.canvasWidth}
           height={GAME_CONFIG.canvasHeight}
-          className="border-2 border-gray-800 rounded-lg shadow-lg"
+          className="border-2 border-gray-800 rounded-lg"
         />
       </div>
 
-      <div className="mt-4 space-y-2 w-full max-w-md">
-        <div className="flex justify-between text-black items-center">
-          <span className="font-bold">遊戲狀態:</span>
-          <span className="text-lg">{getGameStateText()}</span>
+      {/* 遊戲資訊面板 */}
+      <div className="mt-6 bg-gray-50 rounded-lg shadow-lg p-6 w-full max-w-2xl">
+        <div className="grid grid-cols-2 gap-4 mb-4">
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+            <span className="text-sm text-gray-500 block">遊戲狀態</span>
+            <span className="text-xl font-bold text-gray-900">
+              {getGameStateText()}
+            </span>
+          </div>
+
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+            <span className="text-sm text-gray-500 block">分數</span>
+            <span className="text-xl font-bold text-blue-600">
+              {gameStatus.score}
+            </span>
+          </div>
+
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+            <span className="text-sm text-gray-500 block">最高分</span>
+            <span className="text-xl font-bold text-purple-600">
+              {gameStatus.highestScore}
+            </span>
+          </div>
+
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+            <span className="text-sm text-gray-500 block">時間</span>
+            <span className="text-xl font-bold text-green-600">
+              {formatTime(gameStatus.timeElapsedInSeconds)}
+            </span>
+          </div>
         </div>
 
-        <div className="flex justify-between text-black items-center">
-          <span className="font-bold">分數:</span>
-          <span className="text-lg">{gameStatus.score}</span>
-        </div>
-
-        <div className="flex justify-between text-black items-center">
-          <span className="font-bold">最高分:</span>
-          <span className="text-lg">{gameStatus.highestScore}</span>
-        </div>
-
-        <div className="flex justify-between text-black items-center">
-          <span className="font-bold">時間:</span>
-          <span className="text-lg">{formatTime(gameStatus.timeElapsed)}</span>
-        </div>
-
-        <div className="flex justify-between text-black items-center">
-          <span className="font-bold">生命值:</span>
-          <div className="flex">
+        {/* 生命值顯示 */}
+        <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 mb-4">
+          <span className="text-sm text-gray-500 block mb-2">生命值</span>
+          <div className="flex gap-1">
             {[...Array(gameStatus.maxHealth)].map((_, i) => (
               <span
                 key={i}
-                className={`text-2xl ${
+                className={`text-3xl ${
                   i < gameStatus.health ? "text-red-500" : "text-gray-300"
                 } ${gameStatus.isInvincible ? "animate-pulse" : ""}`}
               >
@@ -200,10 +214,11 @@ const StairGame = () => {
           </div>
         </div>
 
-        <div className="flex space-x-2">
+        {/* 控制按鈕保持不變 */}
+        <div className="flex justify-center">
           {gameStatus.gameState === GameState.NOT_STARTED && (
             <button
-              className="flex-1 px-6 py-2 bg-green-500 text-white rounded-md font-medium hover:bg-green-600 transition duration-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+              className="px-8 py-3 bg-green-500 text-white rounded-md font-medium hover:bg-green-600 transition duration-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
               onClick={startGame}
             >
               開始遊戲
@@ -212,25 +227,13 @@ const StairGame = () => {
 
           {gameStatus.gameState === GameState.GAME_OVER && (
             <button
-              className="flex-1 px-6 py-2 bg-blue-500 text-white rounded-md font-medium hover:bg-blue-600 transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+              className="px-8 py-3 bg-blue-500 text-white rounded-md font-medium hover:bg-blue-600 transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
               onClick={startGame}
             >
               重新開始
             </button>
           )}
         </div>
-      </div>
-
-      <div className="mt-4 bg-white text-black p-4 rounded-lg shadow w-full max-w-md">
-        <h3 className="font-bold text-lg mb-2">遊戲說明</h3>
-        <ul className="list-disc pl-5 space-y-1">
-          <li>使用鍵盤左右箭頭鍵控制角色移動</li>
-          <li>避免碰到頂部邊界，否則會扣血並被彈回</li>
-          <li>避免掉落到底部，否則遊戲結束</li>
-          <li>小心尖刺樓梯（紅色）會扣血</li>
-          <li>不穩定樓梯（黃色）會在站立一段時間後消失</li>
-          <li>每個角色有 {GAME_CONFIG.initialHealth} 條命</li>
-        </ul>
       </div>
     </div>
   );

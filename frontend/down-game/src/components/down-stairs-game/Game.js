@@ -86,6 +86,7 @@ export default class Game {
     this.updateStairs(gameSpeed);
 
     this.player.update(keysPressed, this.stairs);
+    this.ensureEnoughStairs();
   }
 
   ensureEnoughStairs() {
@@ -116,7 +117,7 @@ export default class Game {
     const lastStair = this.stairs[this.stairs.length - 1];
     const stairY = lastStair.y + GAME_CONFIG.stairSpacing;
     const stairX =
-      Math.random() * (GAME_CONFIG.canvasHeight - GAME_CONFIG.stairWidth);
+      Math.random() * (GAME_CONFIG.canvasWidth - GAME_CONFIG.stairWidth);
     const newStair = this.entityFactory.createStair(stairX, stairY);
     this.stairs.push(newStair);
   }
